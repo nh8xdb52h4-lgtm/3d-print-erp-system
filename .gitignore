@@ -1,0 +1,29 @@
+# Логи
+*.log
+npm-debug.log*
+
+# Runtime данные
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Временные файлы
+*.tmp
+*.temp
+
+# Бэкапы
+*.backup
+*.bak
+
+# Локальные данные (если будут)
+/local-data/
+/temp-export/
