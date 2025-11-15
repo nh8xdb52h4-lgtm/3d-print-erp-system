@@ -1,0 +1,203 @@
+{
+  "materials": [
+    {
+      "id": "abs",
+      "name": "ABS",
+      "price": 450,
+      "density": 1.04,
+      "temperatures": {
+        "nozzle": 240,
+        "bed": 100,
+        "max": 260
+      },
+      "speeds": {
+        "print": 50,
+        "travel": 150,
+        "first_layer": 20
+      },
+      "properties": {
+        "strength": 8,
+        "flexibility": 5,
+        "heat_resistance": 8,
+        "durability": 9,
+        "surface_quality": 7
+      },
+      "characteristics": [
+        "Высокая прочность",
+        "Термостойкость", 
+        "Хорошая ударная вязкость",
+        "Требует подогреваемый стол"
+      ],
+      "applications": [
+        "Функциональные детали",
+        "Автомобильные комплектующие",
+        "Корпуса приборов"
+      ],
+      "colors": ["черный", "белый", "серый", "синий", "красный"]
+    },
+    {
+      "id": "pla",
+      "name": "PLA",
+      "price": 400,
+      "density": 1.24,
+      "temperatures": {
+        "nozzle": 210,
+        "bed": 60,
+        "max": 230
+      },
+      "speeds": {
+        "print": 60,
+        "travel": 150,
+        "first_layer": 25
+      },
+      "properties": {
+        "strength": 6,
+        "flexibility": 2,
+        "heat_resistance": 4,
+        "durability": 6,
+        "surface_quality": 9
+      },
+      "characteristics": [
+        "Легкая печать",
+        "Биоразлагаемость",
+        "Низкая усадка",
+        "Отличное качество поверхности"
+      ],
+      "applications": [
+        "Макеты и прототипы",
+        "Декоративные изделия",
+        "Образовательные проекты"
+      ],
+      "colors": ["черный", "белый", "серый", "зеленый", "желтый", "прозрачный"]
+    },
+    {
+      "id": "petg",
+      "name": "PETG",
+      "price": 500,
+      "density": 1.27,
+      "temperatures": {
+        "nozzle": 230,
+        "bed": 80,
+        "max": 250
+      },
+      "speeds": {
+        "print": 55,
+        "travel": 150,
+        "first_layer": 22
+      },
+      "properties": {
+        "strength": 7,
+        "flexibility": 7,
+        "heat_resistance": 6,
+        "durability": 8,
+        "surface_quality": 8
+      },
+      "characteristics": [
+        "Прочность и гибкость",
+        "Водостойкость",
+        "Пищевая безопасность",
+        "Химическая стойкость"
+      ],
+      "applications": [
+        "Функциональные детали",
+        "Пищевые контейнеры",
+        "Медицинские модели"
+      ],
+      "colors": ["прозрачный", "черный", "белый", "синий", "красный"]
+    },
+    {
+      "id": "tpu",
+      "name": "TPU",
+      "price": 600,
+      "density": 1.21,
+      "temperatures": {
+        "nozzle": 220,
+        "bed": 40,
+        "max": 240
+      },
+      "speeds": {
+        "print": 30,
+        "travel": 100,
+        "first_layer": 15
+      },
+      "properties": {
+        "strength": 4,
+        "flexibility": 10,
+        "heat_resistance": 5,
+        "durability": 8,
+        "surface_quality": 6
+      },
+      "characteristics": [
+        "Высокая эластичность",
+        "Ударопрочность",
+        "Износостойкость",
+        "Сложная печать"
+      ],
+      "applications": [
+        "Протекторы",
+        "Амортизаторы",
+        "Уплотнители",
+        "Гибкие детали"
+      ],
+      "colors": ["черный", "белый", "прозрачный", "синий"]
+    },
+    {
+      "id": "asa",
+      "name": "ASA",
+      "price": 550,
+      "density": 1.07,
+      "temperatures": {
+        "nozzle": 250,
+        "bed": 100,
+        "max": 270
+      },
+      "speeds": {
+        "print": 50,
+        "travel": 150,
+        "first_layer": 20
+      },
+      "properties": {
+        "strength": 8,
+        "flexibility": 4,
+        "heat_resistance": 9,
+        "durability": 9,
+        "surface_quality": 8
+      },
+      "characteristics": [
+        "УФ-стойкость",
+        "Погодоустойчивость",
+        "Высокая прочность",
+        "Для уличного использования"
+      ],
+      "applications": [
+        "Автомобильные детали",
+        "Уличные конструкции",
+        "Садовая мебель"
+      ],
+      "colors": ["черный", "белый", "серый", "оранжевый"]
+    }
+  ],
+  "resins": [
+    {
+      "id": "standard-resin",
+      "name": "Стандартная смола",
+      "price": 1500,
+      "density": 1.12,
+      "temperatures": {
+        "exposure": 8,
+        "cure": 60
+      },
+      "properties": {
+        "resolution": 9,
+        "strength": 6,
+        "flexibility": 3,
+        "detail": 10
+      },
+      "characteristics": [
+        "Высокое разрешение",
+        "Хрупкость",
+        "Отличная детализация"
+      ]
+    }
+  ]
+}
