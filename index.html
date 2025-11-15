@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Print ERP System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Сайдбар навигации -->
+        <nav class="sidebar">
+            <div class="logo">
+                <span>🖨️</span>
+                <h2>3D Print ERP</h2>
+            </div>
+            <div class="nav-items">
+                <div class="nav-item active" data-tab="dashboard">
+                    <span>📊</span> Дашборд
+                </div>
+                <div class="nav-item" data-tab="calculator">
+                    <span>🧮</span> Калькулятор
+                </div>
+                <div class="nav-item" data-tab="products">
+                    <span>📦</span> Товары
+                </div>
+                <div class="nav-item" data-tab="crm">
+                    <span>👥</span> CRM
+                </div>
+                <div class="nav-item" data-tab="finance">
+                    <span>💰</span> Финансы
+                </div>
+                <div class="nav-item" data-tab="printers">
+                    <span>🖨️</span> Принтеры
+                </div>
+            </div>
+        </nav>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- ДАШБОРД -->
+            <div id="dashboard" class="tab-content active">
+                <div class="header">
+                    <h1>📊 Дашборд</h1>
+                    <div class="current-balance">
+                        Баланс: <span id="balance-amount">7,891 ₽</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>💰 Текущий баланс</h3>
+                        <div class="amount" id="current-balance">7,891 ₽</div>
+                        <div class="subtitle">Цель: 40,891 ₽</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🖨️ Активные принтеры</h3>
+                        <div class="amount" id="active-printers">3/5</div>
+                        <div class="subtitle">2 на обслуживании</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>📦 Заказы сегодня</h3>
+                        <div class="amount" id="today-orders">8</div>
+                        <div class="subtitle">+2 новых</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎯 Выручка месяца</h3>
+                        <div class="amount" id="month-revenue">156,842 ₽</div>
+                        <div class="subtitle">Цель: 200,000 ₽</div>
+                    </div>
+                </div>
+
+                <!-- Быстрые действия -->
+                <div class="quick-actions">
+                    <h3>⚡ Быстрые действия</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="switchTab('calculator')">
+                            🧮 Новый расчет
+                        </button>
+                        <button class="action-btn" onclick="switchTab('crm')">
+                            👥 Добавить клиента
+                        </button>
+                        <button class="action-btn" onclick="switchTab('products')">
+                            📦 Новый товар
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КАЛЬКУЛЯТОР -->
+            <div id="calculator" class="tab-content">
+                <div class="header">
+                    <h1>🧮 Калькулятор 3D-печати</h1>
+                </div>
+
+                <div class="calculator-container">
+                    <div class="form-section">
+                        <h3>📋 Параметры заказа</h3>
+                        
+                        <div class="form-group">
+                            <label for="calc-client">Клиент</label>
+                            <input type="text" id="calc-client" placeholder="Имя клиента">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="calc-weight">Вес изделия (г)</label>
+                                <input type="number" id="calc-weight" value="2000" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="calc-time">Время печати (часы)</label>
+                                <input type="number" id="calc-time" value="60" step="0.5" min="0.1">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="calc-material">Материал</label>
+                                <select id="calc-material">
+                                    <option value="450">ABS (450₽/кг)</option>
+                                    <option value="400">PLA (400₽/кг)</option>
+                                    <option value="500">PETG (500₽/кг)</option>
+                                    <option value="600">TPU (600₽/кг)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="calc-markup">Надбавка (%)</label>
+                                <input type="number" id="calc-markup" value="200" min="0" max="500">
+                            </div>
+                        </div>
+
+                        <button class="calculate-btn" onclick="calculatePrice()">
+                            📊 Рассчитать стоимость
+                        </button>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>📈 Результаты расчета</h3>
+                        <div class="results-card">
+                            <div class="result-item">
+                                <span>Себестоимость:</span>
+                                <span id="result-cost">0 ₽</span>
+                            </div>
+                            <div class="result-item">
+                                <span>Надбавка:</span>
+                                <span id="result-markup">0 ₽</span>
+                            </div>
+                            <div class="result-item total">
+                                <span>Итоговая цена:</span>
+                                <span id="result-price">0 ₽</span>
+                            </div>
+                            <div class="result-item profit">
+                                <span>Прибыль:</span>
+                                <span id="result-profit">0 ₽</span>
+                            </div>
+                        </div>
+
+                        <div class="breakdown">
+                            <h4>📋 Детализация расходов</h4>
+                            <div class="breakdown-grid">
+                                <div class="breakdown-item">
+                                    <span>Материалы:</span>
+                                    <span id="detail-material">0 ₽</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Электричество:</span>
+                                    <span id="detail-electricity">0 ₽</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Амортизация:</span>
+                                    <span id="detail-amortization">0 ₽</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Трудозатраты:</span>
+                                    <span id="detail-labor">0 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ТОВАРЫ -->
+            <div id="products" class="tab-content">
+                <div class="header">
+                    <h1>📦 Управление товарами</h1>
+                    <button class="add-btn" onclick="showAddProductModal()">
+                        + Добавить товар
+                    </button>
+                </div>
+                <div id="products-container">
+                    <!-- Товары будут загружаться здесь -->
+                </div>
+            </div>
+
+            <!-- CRM -->
+            <div id="crm" class="tab-content">
+                <div class="header">
+                    <h1>👥 База клиентов</h1>
+                    <button class="add-btn" onclick="showAddClientModal()">
+                        + Добавить клиента
+                    </button>
+                </div>
+                <div id="clients-container">
+                    <!-- Клиенты будут загружаться здесь -->
+                </div>
+            </div>
+
+            <!-- ФИНАНСЫ -->
+            <div id="finance" class="tab-content">
+                <div class="header">
+                    <h1>💰 Финансовый контроль</h1>
+                </div>
+                <div class="finance-stats">
+                    <div class="stat-card">
+                        <h3>📈 Доходы месяца</h3>
+                        <div class="amount">156,842 ₽</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>📉 Расходы месяца</h3>
+                        <div class="amount">89,451 ₽</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎯 Чистая прибыль</h3>
+                        <div class="amount">67,391 ₽</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРИНТЕРЫ -->
+            <div id="printers" class="tab-content">
+                <div class="header">
+                    <h1>🖨️ Управление принтерами</h1>
+                </div>
+                <div id="printers-container">
+                    <!-- Принтеры будут загружаться здесь -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Подключаем JavaScript -->
+    <script src="script.js"></script>
+    <script src="modules/calculator.js"></script>
+    <script src="modules/products.js"></script>
+    <script src="modules/crm.js"></script>
+    <script src="modules/printers.js"></script>
+</body>
+</html>
