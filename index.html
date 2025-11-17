@@ -39,53 +39,66 @@
         <!-- Основной контент -->
         <main class="main-content">
             <!-- ДАШБОРД -->
-            <div id="dashboard" class="tab-content active">
-                <div class="header">
-                    <h1>📊 Дашборд</h1>
-                    <div class="current-balance">
-                        Баланс: <span id="balance-amount">7,891 ₽</span>
-                    </div>
-                </div>
+<div id="dashboard" class="tab-content active">
+    <div class="header">
+        <h1>📊 Дашборд</h1>
+        <div class="current-balance">
+            Баланс: <span id="balance-amount">7,891 ₽</span>
+        </div>
+    </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>💰 Текущий баланс</h3>
-                        <div class="amount" id="current-balance">7,891 ₽</div>
-                        <div class="subtitle">Цель: 40,891 ₽</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>🖨️ Активные принтеры</h3>
-                        <div class="amount" id="active-printers">3/5</div>
-                        <div class="subtitle">2 на обслуживании</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>📦 Заказы сегодня</h3>
-                        <div class="amount" id="today-orders">8</div>
-                        <div class="subtitle">+2 новых</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>🎯 Выручка месяца</h3>
-                        <div class="amount" id="month-revenue">156,842 ₽</div>
-                        <div class="subtitle">Цель: 200,000 ₽</div>
-                    </div>
-                </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>💰 Текущий баланс</h3>
+            <div class="amount" id="current-balance">7,891 ₽</div>
+            <div class="subtitle">Цель: 40,891 ₽</div>
+        </div>
+        <div class="stat-card">
+            <h3>🖨️ Активные принтеры</h3>
+            <div class="amount" id="active-printers">3/5</div>
+            <div class="subtitle">2 на обслуживании</div>
+        </div>
+        <div class="stat-card">
+            <h3>📦 Заказы сегодня</h3>
+            <div class="amount" id="today-orders">8</div>
+            <div class="subtitle">+2 новых</div>
+        </div>
+        <div class="stat-card">
+            <h3>🎯 Выручка месяца</h3>
+            <div class="amount" id="month-revenue">156,842 ₽</div>
+            <div class="subtitle">Цель: 200,000 ₽</div>
+        </div>
+    </div>
 
-                <!-- Быстрые действия -->
-                <div class="quick-actions">
-                    <h3>⚡ Быстрые действия</h3>
-                    <div class="action-buttons">
-                        <button class="action-btn" onclick="switchTab('calculator')">
-                            🧮 Новый расчет
-                        </button>
-                        <button class="action-btn" onclick="switchTab('crm')">
-                            👥 Добавить клиента
-                        </button>
-                        <button class="action-btn" onclick="switchTab('products')">
-                            📦 Новый товар
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <!-- ГРАФИКИ -->
+    <div class="charts-grid">
+        <div id="sales-chart">
+            <!-- График продаж загрузится здесь -->
+        </div>
+        <div id="printers-chart">
+            <!-- График принтеров загрузится здесь -->
+        </div>
+        <div id="products-chart">
+            <!-- График товаров загрузится здесь -->
+        </div>
+    </div>
+
+    <!-- Быстрые действия -->
+    <div class="quick-actions">
+        <h3>⚡ Быстрые действия</h3>
+        <div class="action-buttons">
+            <button class="action-btn" onclick="switchTab('calculator')">
+                🧮 Новый расчет
+            </button>
+            <button class="action-btn" onclick="switchTab('crm')">
+                👥 Добавить клиента
+            </button>
+            <button class="action-btn" onclick="switchTab('products')">
+                📦 Новый товар
+            </button>
+        </div>
+    </div>
+</div>
 
             <!-- КАЛЬКУЛЯТОР -->
             <div id="calculator" class="tab-content">
