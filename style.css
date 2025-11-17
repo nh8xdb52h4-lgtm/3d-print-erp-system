@@ -397,3 +397,204 @@ input:focus, select:focus {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Стили для графиков */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.chart-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h4 {
+    margin-bottom: 1rem;
+    color: var(--dark);
+    font-size: 1.1rem;
+}
+
+/* График продаж */
+.chart-bars {
+    display: flex;
+    align-items: end;
+    gap: 1rem;
+    height: 200px;
+    padding: 1rem 0;
+}
+
+.chart-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.chart-bar {
+    background: linear-gradient(to top, var(--primary), #3b82f6);
+    width: 40px;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 20px;
+}
+
+.chart-bar:hover {
+    transform: scale(1.05);
+}
+
+.chart-bar-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.chart-bar-label {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--secondary);
+}
+
+/* График статусов */
+.status-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-active { background: var(--success); }
+.status-maintenance { background: var(--warning); }
+.status-broken { background: var(--danger); }
+.status-idle { background: var(--secondary); }
+
+.status-label {
+    flex: 1;
+    font-weight: 500;
+}
+
+.status-count {
+    font-weight: bold;
+    color: var(--dark);
+}
+
+/* График товаров */
+.products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-chart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 6px;
+    border-left: 4px solid var(--success);
+}
+
+.product-chart-item.low-stock {
+    border-left-color: var(--warning);
+}
+
+.product-name {
+    font-weight: 500;
+    flex: 1;
+}
+
+.product-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+}
+
+.product-stats .price {
+    font-weight: bold;
+    color: var(--success);
+}
+
+.product-stats .profitability {
+    color: var(--primary);
+}
+
+.product-stats .stock {
+    color: var(--secondary);
+}
+
+/* Тренды */
+.trend {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.trend.positive {
+    color: var(--success);
+}
+
+.trend.negative {
+    color: var(--danger);
+}
+
+/* Заголовки секций */
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h3 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--secondary);
+}
+
+/* Заглушки для модулей */
+.coming-soon {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.coming-soon-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.coming-soon h4 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.coming-soon p {
+    color: var(--secondary);
+}
