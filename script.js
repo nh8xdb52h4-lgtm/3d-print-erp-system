@@ -1,145 +1,346 @@
 // =================================
-// МОДУЛЬ КАЛЬКУЛЯТОРА 3D-ПЕЧАТИ
+// 3D PRINT ERP SYSTEM - MAIN SCRIPT
 // =================================
 
-class Calculator {
-    constructor() {
-        this.settings = {
-            electricityPrice: 7, // ₽ за кВт·ч
-            operatorRate: 500,   // ₽ в час
-            amortizationRate: 5, // ₽ в час
-            failureRate: 0.10    // 10% на сбои
-        };
+// Глобальные переменные системы
+let erpSystem = {
+    currentTab: 'dashboard',
+    data: {
+        finances: {
+            balance: 7891,
+            monthlyGoal: 200000,
+            criticalGoals: [
+                { name: "Аренда", amount: 33000, deadline: "2024-12-01" },
+                { name: "Выкуп принтера", amount: 7891, deadline: "2024-11-30" }
+            ]
+        },
+        printers: [
+            { id: 1, name: "ANYCUBIC CHIRON", status: "active", materials: ["ABS", "PLA", "PETG"] },
+            { id: 2, name: "Creality Ender 3", status: "maintenance", materials: ["PLA", "PETG"] },
+            { id: 3, name: "Prusa MK3S+", status: "active", materials: ["ABS", "PLA", "PETG", "TPU"] }
+        ],
+        orders: [
+            { id: 1, client: "Юреев Д.Н.", product: "RMK-TOYOTA-FUNCARGO", status: "completed", price: 12864, date: "2024-11-15" },
+            { id: 2, client: "Иванов А.В.", product: "DET-MIRROR-BRACKET", status: "printing", price: 3560, date: "2024-11-15" }
+        ],
+        clients: [
+            { id: 1, name: "Юреев Дмитрий Николаевич", phone: "89370780708", totalOrders: 3, totalSpent: 38592, status: "regular" },
+            { id: 2, name: "Иванов Алексей Владимирович", phone: "89215554321", totalOrders: 1, totalSpent: 3560, status: "new" }
+        ],
+        products: [
+            { id: "RMK-TOYOTA-FUNCARGO", name: "Ремкомплект Toyota Funcargo", price: 12864, cost: 4288, stock: 15, minStock: 5 },
+            { id: "DET-MIRROR-BRACKET", name: "Кронштейн зеркала", price: 3560, cost: 1187, stock: 8, minStock: 3 }
+        ]
     }
+};
 
-    calculatePrice(weight, time, materialPrice, markupPercent = 200) {
-        // Расчет стоимости материалов
-        const materialCost = (weight / 1000) * materialPrice;
-        
-        // Расчет электроэнергии
-        const electricityCost = time * 0.3 * this.settings.electricityPrice;
-        
-        // Амортизация оборудования
-        const amortizationCost = time * this.settings.amortizationRate;
-        
-        // Трудозатраты
-        const laborCost = time * 50; // Упрощенный расчет
-        
-        // Итоговая себестоимость
-        const totalCost = materialCost + electricityCost + amortizationCost + laborCost;
-        
-        // Учет возможных сбоев
-        const costWithFailures = totalCost * (1 + this.settings.failureRate);
-        
-        // Цена продажи
-        const markup = markupPercent / 100;
-        const finalPrice = costWithFailures * (1 + markup);
-        const profit = finalPrice - costWithFailures;
+// Инициализация системы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Инициализация ERP системы...');
+    initializeSystem();
+});
 
-        return {
-            materialCost: Math.round(materialCost),
-            electricityCost: Math.round(electricityCost),
-            amortizationCost: Math.round(amortizationCost),
-            laborCost: Math.round(laborCost),
-            totalCost: Math.round(costWithFailures),
-            finalPrice: Math.round(finalPrice),
-            profit: Math.round(profit),
-            markupAmount: Math.round(costWithFailures * markup)
-        };
-    }
-
-    calculatePrintTime(weight, material, quality = 'standard') {
-        // Эмпирическая формула расчета времени печати
-        const baseTimePerGram = 0.03; // 3 минуты на грамм
-        const qualityMultipliers = {
-            'draft': 0.7,
-            'standard': 1.0,
-            'high': 1.5,
-            'ultra': 2.0
-        };
-        
-        const multiplier = qualityMultipliers[quality] || 1.0;
-        const totalMinutes = weight * baseTimePerGram * multiplier;
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = Math.round(totalMinutes % 60);
-        
-        return {
-            totalMinutes: Math.round(totalMinutes),
-            formatted: `${hours}ч ${minutes}м`,
-            hours: totalMinutes / 60
-        };
-    }
-
-    recommendMaterial(requirements) {
-        const materials = {
-            'ABS': { strength: 8, flexibility: 5, heatResistance: 8, price: 450 },
-            'PLA': { strength: 6, flexibility: 2, heatResistance: 4, price: 400 },
-            'PETG': { strength: 7, flexibility: 7, heatResistance: 6, price: 500 },
-            'TPU': { strength: 4, flexibility: 10, heatResistance: 5, price: 600 }
-        };
-
-        let bestMatch = null;
-        let bestScore = 0;
-
-        for (const [material, props] of Object.entries(materials)) {
-            let score = 0;
-            
-            if (requirements.strength && props.strength >= requirements.strength) score += 2;
-            if (requirements.flexibility && props.flexibility >= requirements.flexibility) score += 2;
-            if (requirements.heatResistance && props.heatResistance >= requirements.heatResistance) score += 2;
-            if (requirements.budget && props.price <= requirements.budget) score += 1;
-
-            if (score > bestScore) {
-                bestScore = score;
-                bestMatch = material;
-            }
-        }
-
-        return {
-            material: bestMatch,
-            score: bestScore,
-            properties: materials[bestMatch]
-        };
-    }
+// Основные функции системы
+function initializeSystem() {
+    setupNavigation();
+    loadDashboard();
+    setupEventListeners();
+    console.log('✅ Система инициализирована');
 }
 
-// Глобальная функция для использования в HTML
-function calculatePrice() {
-    const calculator = new Calculator();
+function setupNavigation() {
+    console.log('🔄 Настройка навигации...');
     
-    // Получаем значения из формы
-    const weight = parseFloat(document.getElementById('calc-weight').value) || 0;
-    const time = parseFloat(document.getElementById('calc-time').value) || 0;
-    const materialPrice = parseFloat(document.getElementById('calc-material').value) || 0;
-    const markup = parseFloat(document.getElementById('calc-markup').value) || 200;
+    const navItems = document.querySelectorAll('.nav-item');
+    console.log('Найдено пунктов меню:', navItems.length);
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabName = this.getAttribute('data-tab');
+            console.log('Клик по меню:', tabName);
+            switchTab(tabName);
+        });
+    });
+    
+    // Активируем первую вкладку
+    switchTab('dashboard');
+}
 
-    // Проверяем валидность данных
-    if (weight <= 0 || time <= 0) {
-        alert('Пожалуйста, введите корректные значения веса и времени');
-        return;
+function switchTab(tabName) {
+    console.log('🔄 Переключение на вкладку:', tabName);
+    
+    // Скрыть все вкладки
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Убрать активный класс у всех пунктов меню
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Показать выбранную вкладку
+    const targetTab = document.getElementById(tabName);
+    if (targetTab) {
+        targetTab.classList.add('active');
+        console.log('✅ Вкладка активирована:', tabName);
+    } else {
+        console.error('❌ Вкладка не найдена:', tabName);
     }
 
-    // Выполняем расчет
-    const results = calculator.calculatePrice(weight, time, materialPrice, markup);
+    // Активировать пункт меню
+    const targetNavItem = document.querySelector(`[data-tab="${tabName}"]`);
+    if (targetNavItem) {
+        targetNavItem.classList.add('active');
+    }
 
-    // Обновляем интерфейс
-    updateCalculationResults(results);
+    // Загрузить данные для вкладки
+    switch(tabName) {
+        case 'dashboard':
+            loadDashboard();
+            break;
+        case 'calculator':
+            loadCalculator();
+            break;
+        case 'products':
+            loadProducts();
+            break;
+        case 'crm':
+            loadClients();
+            break;
+        case 'finance':
+            loadFinance();
+            break;
+        case 'printers':
+            loadPrinters();
+            break;
+    }
 }
 
-function updateCalculationResults(results) {
-    // Основные результаты
-    document.getElementById('result-cost').textContent = formatCurrency(results.totalCost);
-    document.getElementById('result-markup').textContent = formatCurrency(results.markupAmount);
-    document.getElementById('result-price').textContent = formatCurrency(results.finalPrice);
-    document.getElementById('result-profit').textContent = formatCurrency(results.profit);
+// Загрузка дашборда с графиками
+function loadDashboard() {
+    console.log('📊 Загрузка дашборда...');
+    
+    const activePrinters = erpSystem.data.printers.filter(p => p.status === 'active').length;
+    const todayOrders = erpSystem.data.orders.filter(o => {
+        const orderDate = new Date(o.date);
+        const today = new Date();
+        return orderDate.toDateString() === today.toDateString();
+    }).length;
 
-    // Детализация
-    document.getElementById('detail-material').textContent = formatCurrency(results.materialCost);
-    document.getElementById('detail-electricity').textContent = formatCurrency(results.electricityCost);
-    document.getElementById('detail-amortization').textContent = formatCurrency(results.amortizationCost);
-    document.getElementById('detail-labor').textContent = formatCurrency(results.laborCost);
+    // Обновление статистики
+    updateElement('current-balance', formatCurrency(erpSystem.data.finances.balance));
+    updateElement('active-printers', `${activePrinters}/${erpSystem.data.printers.length}`);
+    updateElement('today-orders', todayOrders);
+    updateElement('month-revenue', formatCurrency(156842));
+
+    // Создаем графики
+    createCharts();
 }
 
+function createCharts() {
+    console.log('📈 Создание графиков...');
+    
+    // График продаж за месяц
+    createSalesChart();
+    
+    // График загрузки принтеров
+    createPrintersChart();
+    
+    // График популярности товаров
+    createProductsChart();
+}
+
+function createSalesChart() {
+    const container = document.getElementById('sales-chart');
+    if (!container) return;
+    
+    const salesData = {
+        'Неделя 1': 45000,
+        'Неделя 2': 52000,
+        'Неделя 3': 48000,
+        'Неделя 4': 61000
+    };
+    
+    let html = `
+        <div class="chart-container">
+            <h4>📈 Продажи по неделям</h4>
+            <div class="chart-bars">
+    `;
+    
+    Object.entries(salesData).forEach(([week, amount]) => {
+        const height = (amount / 70000) * 100;
+        html += `
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="height: ${height}%">
+                    <div class="chart-bar-value">${formatCurrency(amount)}</div>
+                </div>
+                <div class="chart-bar-label">${week}</div>
+            </div>
+        `;
+    });
+    
+    html += `</div></div>`;
+    container.innerHTML = html;
+}
+
+function createPrintersChart() {
+    const container = document.getElementById('printers-chart');
+    if (!container) return;
+    
+    const statusCount = {
+        'active': erpSystem.data.printers.filter(p => p.status === 'active').length,
+        'maintenance': erpSystem.data.printers.filter(p => p.status === 'maintenance').length,
+        'idle': erpSystem.data.printers.filter(p => p.status === 'idle').length
+    };
+    
+    let html = `
+        <div class="chart-container">
+            <h4>🖨️ Статус принтеров</h4>
+            <div class="status-chart">
+    `;
+    
+    Object.entries(statusCount).forEach(([status, count]) => {
+        const percentage = (count / erpSystem.data.printers.length) * 100;
+        const statusClass = getPrinterStatusClass(status);
+        const statusText = getPrinterStatusText(status);
+        
+        html += `
+            <div class="status-item">
+                <div class="status-indicator ${statusClass}"></div>
+                <span class="status-label">${statusText}</span>
+                <span class="status-count">${count} (${percentage.toFixed(0)}%)</span>
+            </div>
+        `;
+    });
+    
+    html += `</div></div>`;
+    container.innerHTML = html;
+}
+
+function createProductsChart() {
+    const container = document.getElementById('products-chart');
+    if (!container) return;
+    
+    let html = `
+        <div class="chart-container">
+            <h4>📦 Топ товаров</h4>
+            <div class="products-list">
+    `;
+    
+    erpSystem.data.products.forEach(product => {
+        const profitability = ((product.price - product.cost) / product.cost * 100).toFixed(1);
+        const status = product.stock <= product.minStock ? 'low-stock' : 'in-stock';
+        
+        html += `
+            <div class="product-chart-item ${status}">
+                <div class="product-name">${product.name}</div>
+                <div class="product-stats">
+                    <span class="price">${formatCurrency(product.price)}</span>
+                    <span class="profitability">${profitability}%</span>
+                    <span class="stock">${product.stock} шт</span>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `</div></div>`;
+    container.innerHTML = html;
+}
+
+// Загрузка других вкладок
+function loadCalculator() {
+    console.log('🧮 Загрузка калькулятора...');
+    // Калькулятор загрузится автоматически
+}
+
+function loadProducts() {
+    console.log('📦 Загрузка товаров...');
+    const container = document.getElementById('products-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="section-header">
+            <h3>Управление товарами</h3>
+            <p>Здесь будет список всех товаров и управление остатками</p>
+        </div>
+        <div class="coming-soon">
+            <div class="coming-soon-icon">📦</div>
+            <h4>Модуль в разработке</h4>
+            <p>Скоро здесь появится полное управление товарами</p>
+        </div>
+    `;
+}
+
+function loadClients() {
+    console.log('👥 Загрузка клиентов...');
+    const container = document.getElementById('clients-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="section-header">
+            <h3>База клиентов</h3>
+            <p>Управление клиентами и история заказов</p>
+        </div>
+        <div class="coming-soon">
+            <div class="coming-soon-icon">👥</div>
+            <h4>Модуль в разработке</h4>
+            <p>Скоро здесь появится полноценная CRM система</p>
+        </div>
+    `;
+}
+
+function loadFinance() {
+    console.log('💰 Загрузка финансов...');
+    const container = document.querySelector('#finance .finance-stats');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>📈 Доходы месяца</h3>
+                <div class="amount">156,842 ₽</div>
+                <div class="trend positive">+12%</div>
+            </div>
+            <div class="stat-card">
+                <h3>📉 Расходы месяца</h3>
+                <div class="amount">89,451 ₽</div>
+                <div class="trend negative">-8%</div>
+            </div>
+            <div class="stat-card">
+                <h3>🎯 Чистая прибыль</h3>
+                <div class="amount">67,391 ₽</div>
+                <div class="trend positive">+25%</div>
+            </div>
+            <div class="stat-card">
+                <h3>📊 Рентабельность</h3>
+                <div class="amount">43%</div>
+                <div class="trend positive">+5%</div>
+            </div>
+        </div>
+    `;
+}
+
+function loadPrinters() {
+    console.log('🖨️ Загрузка принтеров...');
+    const container = document.getElementById('printers-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="section-header">
+            <h3>Управление принтерами</h3>
+            <p>Мониторинг статусов и планирование работ</p>
+        </div>
+        <div class="coming-soon">
+            <div class="coming-soon-icon">🖨️</div>
+            <h4>Модуль в разработке</h4>
+            <p>Скоро здесь появится управление принтерами</p>
+        </div>
+    `;
+}
+
+// Вспомогательные функции
 function formatCurrency(amount) {
     return new Intl.NumberFormat('ru-RU', {
         style: 'currency',
@@ -148,22 +349,45 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
-// Функция для расчета времени печати
-function estimatePrintTime() {
-    const calculator = new Calculator();
-    const weight = parseFloat(document.getElementById('calc-weight').value) || 0;
-    
-    if (weight > 0) {
-        const timeEstimate = calculator.calculatePrintTime(weight);
-        // Можно добавить отображение времени где-то в интерфейсе
-        console.log('Estimated print time:', timeEstimate);
+function updateElement(id, content) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.textContent = content;
     }
 }
 
-// Авторасчет при изменении веса
-document.addEventListener('DOMContentLoaded', function() {
-    const weightInput = document.getElementById('calc-weight');
-    if (weightInput) {
-        weightInput.addEventListener('input', estimatePrintTime);
-    }
-});
+function getPrinterStatusClass(status) {
+    const classes = {
+        'active': 'status-active',
+        'maintenance': 'status-maintenance',
+        'broken': 'status-broken',
+        'idle': 'status-idle'
+    };
+    return classes[status] || 'status-idle';
+}
+
+function getPrinterStatusText(status) {
+    const texts = {
+        'active': 'Работает',
+        'maintenance': 'Обслуживание',
+        'broken': 'Сломан',
+        'idle': 'Простой'
+    };
+    return texts[status] || 'Неизвестно';
+}
+
+function setupEventListeners() {
+    // Автосохранение при изменении данных
+    setInterval(() => {весь
+        localStorage.setItem('erpSystem', JSON.stringify(erpSystem));
+    }, 30000);
+}
+
+// Глобальные функции для HTML
+function showAddProductModal() {
+    alert('Функция добавления товара будет доступна в следующей версии');
+}
+
+function showAddClientModal() {
+    alert('Функция добавления клиента будет доступна в следующей версии');
+}
